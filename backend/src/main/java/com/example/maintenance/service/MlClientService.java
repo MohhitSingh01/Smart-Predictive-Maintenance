@@ -13,7 +13,6 @@ import java.util.Map;
 @Service
 public class MlClientService {
 
-    // ✅ FIXED PORT
     private static final String PYTHON_URL = "http://localhost:8001/predict";
 
     public PredictionResponse getPrediction(JetEngineRequest request) {
@@ -49,8 +48,8 @@ public class MlClientService {
         // Map to your API response
         PredictionResponse result = new PredictionResponse();
         result.setPrediction(ml.getPrediction());
-        result.setProbability(ml.getFailureProbability()); // ✅ FIXED
-        result.setRiskLevel(ml.getRiskLevel());            // ✅ ADD THIS
+        result.setProbability(ml.getFailureProbability());
+        result.setRiskLevel(ml.getRiskLevel());
 
         return result;
     }
