@@ -1,3 +1,5 @@
+import Login from "./Login";
+import Graph from "./Graph";
 import { useState, useEffect } from "react";
 import { predictFailure } from "./api";
 import "./App.css";
@@ -37,6 +39,7 @@ function App() {
     previousFailures: "",
   });
 
+  const [loggedIn, setLoggedIn] = useState(false);
   const [result, setResult] = useState(null);
   const [history, setHistory] = useState([]);
   const [lastPayload, setLastPayload] = useState(null);
@@ -177,6 +180,10 @@ function App() {
     result && result.failureProbability != null
       ? (result.failureProbability * 100).toFixed(1)
       : null;
+
+  if (!loggedIn) {
+    return <Login setLoggedIn={setLoggedIn} />;
+  }
 
   return (
     <div className="app-root">
@@ -375,6 +382,26 @@ function App() {
             </div>
           )}
 
+          <button
+            className="primary-button"
+            style={{ marginTop: "10px" }}
+            onClick={() => {
+              const url = `http://localhost:8080/report?prediction=${result.prediction}
+              &probability=${result.failureProbability}
+              &risk=${result.riskLevel}
+              &cycles=${form.cyclesSinceMaintenance}
+              &temp=${form.avgTurbineTemp}
+              &pressure=${form.compressorPressureRatio}
+              &vibration=${form.vibrationLevel}
+              &fuel=${form.fuelFlowVariation}
+              &failures=${form.previousFailures}`;
+
+              window.open(url);
+            }}
+          >
+            Download Report (PDF)
+          </button>
+
           {/* These cards are shown even before first prediction */}
 
           <div className="metrics-card">
@@ -501,6 +528,16 @@ function App() {
                 </div>
               </div>
             )}
+          </div>
+
+          <div className="graph-card">
+            <h3>Prediction Trend</h3>
+            <Graph
+              history={history.map((h, i) => ({
+                index: i + 1,
+                prediction: h.prediction,
+              }))}
+            />
           </div>
 
           <div className="history-card">
