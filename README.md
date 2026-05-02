@@ -10,12 +10,6 @@ React → Spring Boot → FastAPI → ML Model
 
 ---
 
-## 📸 Dashboard
-
-(Add screenshot in /assets/dashboard.png)
-
----
-
 ## 🧠 Features
 
 * Failure prediction
